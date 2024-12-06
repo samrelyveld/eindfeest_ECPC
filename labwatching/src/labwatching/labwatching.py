@@ -1,3 +1,6 @@
+<<<<<<< HEAD
+tes test tesqweqwhvdwqjvdw
+=======
 import nidaqmx
 from nidaqmx.constants import READ_ALL_AVAILABLE, AcquisitionType
 
@@ -15,3 +18,4 @@ with nidaqmx.Task() as task:
     data = task.read(READ_ALL_AVAILABLE)
     print("Acquired data: [" + ", ".join(f"{value:f}" for value in data) + "]")
     task.stop()
+>>>>>>> b963604caabdc5fed1375b036e73b0c7d1f87be2
