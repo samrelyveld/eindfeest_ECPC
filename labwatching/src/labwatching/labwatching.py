@@ -15,3 +15,4 @@ with nidaqmx.Task() as task:
     data = task.read(READ_ALL_AVAILABLE)
     print("Acquired data: [" + ", ".join(f"{value:f}" for value in data) + "]")
     task.stop()
+test
