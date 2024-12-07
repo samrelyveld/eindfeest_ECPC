@@ -1,7 +1,7 @@
 from PySide6.QtWidgets import *
 from PySide6.QtCore import *
 from PySide6.QtGui import *
-https://stackoverflow.com/questions/74050466/pyside6-respond-to-keyboard-input
+
 class Window(QWidget):
 
     def __init__(self, parent=None):
