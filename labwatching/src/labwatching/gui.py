@@ -6,76 +6,9 @@ from PySide6 import QtWidgets
 from PySide6.QtCore import Slot
 # from labwatching.model_test import data_analysis
 
-# class UserInterface(QtWidgets.QMainWindow):
-#     """
-#     """
-#     def __init__(self):
-#         """
-#         """
-#         super().__init__()
-#         central_widget = QtWidgets.QWidget()
-#         self.setCentralWidget(central_widget)
+pg.setConfigOption("background", "w")
+pg.setConfigOption("foreground", "k")
 
-#         self.data = data_analysis()
-
-#         vbox = QtWidgets.QVBoxLayout(central_widget)
-
-#         hbox = QtWidgets.QHBoxLayout()
-#         vbox.addLayout(hbox)
-
-#         self.plot_widget = pg.PlotWidget()
-#         vbox.addWidget(self.plot_widget)
-
-
-#         start_button = QtWidgets.QPushButton("Start")
-#         vbox.addWidget(start_button)
-
-
-#         save_button = QtWidgets.QPushButton("save")
-#         vbox.addWidget(save_button)
-
-
-# class MyTableWidget():
-    
-#     def __init__(self, parent):
-#         super(QtWidgets.QWidget, self).__init__(parent)
-#         self.layout = QtWidgets.QVBoxLayout(self)
-        
-#         # Initialize tab screen
-#         self.tabs = QtWidgets.QTabWidget()
-#         self.tab1 = QtWidgets.QWidget()
-#         self.tab2 = QtWidgets.QWidget()
-#         self.tabs.resize(300,200)
-        
-#         # Add tabs
-#         self.tabs.addTab(self.tab1,"Tab 1")
-#         self.tabs.addTab(self.tab2,"Tab 2")
-        
-#         # Create first tab
-#         self.tab1.layout = QtWidgets.QVBoxLayout(self)
-#         self.pushButton1 = QtWidgets.QPushButton("PyQt5 button")
-#         self.tab1.layout.addWidget(self.pushButton1)
-#         self.tab1.setLayout(self.tab1.layout)
-        
-#         # Add tabs to widget
-#         self.layout.addWidget(self.tabs)
-#         self.setLayout(self.layout)
-        
-#     @Slot()
-#     def on_click(self):
-#         print("\n")
-#         for currentQTableWidgetItem in self.tableWidget.selectedItems():
-#             print(currentQTableWidgetItem.row(), currentQTableWidgetItem.column(), currentQTableWidgetItem.text())
-
-# def main():
-#     app = QtWidgets.QApplication(sys.argv)
-#     ui = UserInterface()
-#     ui.show()
-#     sys.exit(app.exec())
-
-
-# if __name__ == "__main__":
-#     main()  
 
 class TabWidgetApp(QtWidgets.QMainWindow):
     def __init__(self):
@@ -87,6 +20,11 @@ class TabWidgetApp(QtWidgets.QMainWindow):
         self.setCentralWidget(self.central_widget)
 
         self.layout = QtWidgets.QVBoxLayout(self.central_widget)
+        hbox = QtWidgets.QHBoxLayout()
+        self.layout.addLayout(hbox)
+
+        self.plot_widget = pg.PlotWidget()
+
 
         self.tab_widget = QtWidgets.QTabWidget()
         self.tab1 = QtWidgets.QWidget()
@@ -102,10 +40,13 @@ class TabWidgetApp(QtWidgets.QMainWindow):
         self.initTab1()
         self.initTab2()
         self.initTab3()
+        self.plot()
+
 
     def initTab1(self):
         layout = QtWidgets.QVBoxLayout(self.tab1)
         label = QtWidgets.QLabel("Content of Tab 1")
+        layout.addWidget(self.plot_widget)
         layout.addWidget(label)
 
     def initTab2(self):
@@ -118,8 +59,28 @@ class TabWidgetApp(QtWidgets.QMainWindow):
         label = QtWidgets.QLabel("Content of Tab 3")
         layout.addWidget(label)
 
-if __name__ == '__main__':
+    def plot(self):
+        """plots the sine function
+        """
+        self.plot_widget.clear()
+        x = np.linspace(-np.pi, np.pi, 100)
+        self.plot_widget.plot(x, np.sin(x), symbol=None, pen={"color": "m", "width": 5})
+        self.plot_widget.setLabel("left", "y-axis [units]")
+        self.plot_widget.setLabel("bottom", "x-axis [units]")
+        #self.plot()
+
+# if __name__ == '__main__':
+#     app = QtWidgets.QApplication(sys.argv)
+#     tabWidgetApp = TabWidgetApp()
+#     tabWidgetApp.show()
+#     sys.exit(app.exec())
+
+def main():
     app = QtWidgets.QApplication(sys.argv)
-    tabWidgetApp = TabWidgetApp()
-    tabWidgetApp.show()
+    ui = TabWidgetApp()
+    ui.show()
     sys.exit(app.exec())
+
+
+if __name__ == "__main__":
+    main()

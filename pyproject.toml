@@ -6,11 +6,13 @@ authors = ["samrelyveld <samrelyveld@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.13"
+python = ">=3.13,<3.14"
 nidaqmx = "^1.0.2"
 numpy = "^2.1.3"
 scipy = "^1.14.1"
 matplotlib = "^3.9.3"
+pyqtgraph = "^0.13.7"
+pyside6 = "^6.8.1"
 
 
 [build-system]
