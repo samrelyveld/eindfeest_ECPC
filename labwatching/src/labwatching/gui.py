@@ -65,12 +65,24 @@ class TabWidgetApp(QtWidgets.QMainWindow):
 
 
     def initTab1(self):
-        layout = QtWidgets.QVBoxLayout(self.tab1)
-        label = QtWidgets.QLabel("Content of Tab 1")
+        layout = QtWidgets.QHBoxLayout(self.tab1)
         self.plot_widget = pg.PlotWidget()
         layout.addWidget(self.plot_widget)
-        layout.addWidget(label)
-        self.plot()
+
+        group_box = QtWidgets.QGroupBox("Group Box")
+        group_layout = QtWidgets.QVBoxLayout(group_box)
+
+        self.wel_plot = QtWidgets.QCheckBox("wel plot")
+        self.geen_plot = QtWidgets.QCheckBox("geen plot")
+
+        
+        group_layout.addWidget(self.wel_plot)
+        group_layout.addWidget(self.geen_plot)
+        
+        self.wel_plot.stateChanged.connect(self.verandering)
+        self.geen_plot.stateChanged.connect(self.verandering)
+        
+        layout.addWidget(group_box)
 
     def initTab2(self):
         layout = QtWidgets.QVBoxLayout(self.tab2)
@@ -102,8 +114,6 @@ class TabWidgetApp(QtWidgets.QMainWindow):
         
         group_layout.addWidget(option_1)
         group_layout.addWidget(option_2)
-
-
 
 
         layout.addWidget(group_box)
@@ -140,6 +150,11 @@ class TabWidgetApp(QtWidgets.QMainWindow):
     def add_text_button_clicked(self):
         self.textedit.append("You clicked me.")
 
+    def verandering(self):
+        if self.wel_plot.isChecked():
+            self.plot()
+        if self.geen_plot.isChecked():
+            self.plot_widget.clear()
 
     @Slot()
     def save_data(self):
