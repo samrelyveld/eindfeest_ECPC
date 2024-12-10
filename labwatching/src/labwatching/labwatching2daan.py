@@ -16,7 +16,7 @@ with nidaqmx.Task() as task:
 
     try:
         while True:
-            # Read 100 samples from the channel
+            # Read 100 samples from the \channel
             data = task.read(number_of_samples_per_channel=100)
             print(data)  # Process or analyze data here
 
