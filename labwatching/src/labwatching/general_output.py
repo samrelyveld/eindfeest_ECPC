@@ -21,6 +21,10 @@ colors = {
 def snelheid_functie(x, a, b, x0):
     return a * (x - x0) ** 2 + b
 
+def gaussian(x, amp, mean, stddev):
+    """Gaussian function to fit to the histogram."""
+    return amp * np.exp(-(x - mean)**2 / (2 * stddev**2))
+
 def fit_sec(data_input):
     # Data van de fotodetector
     data = np.array(data_input)  # Vul hier de fotodetectordata in
@@ -28,7 +32,6 @@ def fit_sec(data_input):
 
     # Bereken de FFT
     n = len(data)
-    print ("n= ", n)
     fft_result = fft(data)
     frequencies = fftfreq(n, d=1/sampling_rate)  # Frequenties bij FFT
 
@@ -39,7 +42,15 @@ def fit_sec(data_input):
     # Vind de dominante frequentie
     dominant_frequency_index = np.argmax(positive_fft)
     dominant_frequency = positive_frequencies[dominant_frequency_index]
-
+    
+    plt.figure(figsize=(10, 6))
+    plt.plot(positive_frequencies, positive_fft)
+    plt.title("FFT van de fotodetectordata")
+    plt.xlabel("Frequentie (Hz)")
+    plt.ylabel("Amplitude")
+    plt.grid()
+    plt.show()
+    
     # Visualiseer de frequentiespectrum
 
     # Snelheid berekening
@@ -82,6 +93,17 @@ def measure():
             plt.title('Histogram of Dominant Frequencies')
             plt.grid(True)
             plt.tight_layout()
+            
+            # Perform Gaussian fit on the histogram
+            data_hist, bins_hist = np.histogram(fit_list, bins=20, density=True)
+            bin_centers = (bins_hist[:-1] + bins_hist[1:]) / 2
+            
+            # Fit a Gaussian to the histogram data
+            popt, _ = curve_fit(gaussian, bin_centers, data_hist, p0=[1, np.mean(fit_list), np.std(fit_list)])
+
+            # Plot the Gaussian fit
+            plt.plot(bin_centers, gaussian(bin_centers, *popt), 'r-', label='Gaussian fit')
+            plt.legend()
             plt.show()
                     
             
