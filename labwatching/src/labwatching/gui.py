@@ -4,7 +4,7 @@ import pyqtgraph as pg
 import numpy as np
 from PySide6 import QtWidgets
 from PySide6.QtCore import Slot
-from PySide6.QtGui import QKeySequence, QShortcut
+from PySide6.QtGui import QKeySequence, QShortcut, QFont, QPixmap
 #from labwatching.model_test import data_analysis
 
 pg.setConfigOption("background", "w")
@@ -17,14 +17,14 @@ class TabWidgetApp(QtWidgets.QMainWindow):
         self.setWindowTitle('Tab Widget Demo')
         self.setGeometry(100, 100, 400, 300)
 
+        #self.setStyleSheet("background-color: yellow;")
+
         self.central_widget = QtWidgets.QWidget()
         self.setCentralWidget(self.central_widget)
 
         self.layout = QtWidgets.QVBoxLayout(self.central_widget)
 
         self.hbox = QtWidgets.QHBoxLayout()
-
-
 
 
         self.tab_widget = QtWidgets.QTabWidget()
@@ -36,7 +36,7 @@ class TabWidgetApp(QtWidgets.QMainWindow):
         self.tab_widget.addTab(self.tab4, "overzicht, menu")
         self.tab_widget.addTab(self.tab1, "grafiek")
         self.tab_widget.addTab(self.tab2, "Tab opslaan")
-        self.tab_widget.addTab(self.tab3, "Tab 4")
+        self.tab_widget.addTab(self.tab3, "wie zijn wij")
 
 
         self.layout.addWidget(self.tab_widget)
@@ -51,18 +51,33 @@ class TabWidgetApp(QtWidgets.QMainWindow):
 
         self.short_cut()
 
+        
 
     def initTab4(self):
         layout = QtWidgets.QVBoxLayout(self.tab4)
-        label = QtWidgets.QLabel("Content of Tab 1")
+        self.textedit = QtWidgets.QTextEdit() 
+        self.label_1 = QtWidgets.QLabel("Welkom bij labwatching", self) 
 
-        self.textedit = QtWidgets.QTextEdit()
+        layout.addWidget(self.label_1)
+        self.label_1.move(30, 50)
+        self.label_1.setFont(QFont('Arial', 15)) 
+
+        # self.label_2 = QtWidgets.QLabel('Labwatch', self)
+        # self.label_2.move(30, 60)
+        # self.label_2.setFont(QFont('arial', 40))
+
+        self.textedit.append(" ")
+        self.textedit.append(None)
+        self.textedit.append(" ")
+        self.textedit.append("Dit zijn de shortcuts die je kan gebruiken")
+        self.textedit.append(" ")
         self.textedit.append("Alt 1,2,3,4 is tab bladen")
         self.textedit.append("ctrl+s = data oplaan")
         self.textedit.append("alt+c plot weg")
         
         layout.addWidget(self.textedit)
 
+        self.label_3 = QtWidgets.QLabel("")
 
     def initTab1(self):
         layout = QtWidgets.QHBoxLayout(self.tab1)
@@ -94,31 +109,35 @@ class TabWidgetApp(QtWidgets.QMainWindow):
         layout.addWidget(label)
 
     def initTab3(self):
-        label = QtWidgets.QLabel("Content of Tab 3")
+        self.acceptDrops()
         layout = QtWidgets.QHBoxLayout(self.tab3)
+        
+        label = QtWidgets.QLabel("About us")
         layout.addWidget(label)
+        
+        
+        # self.label = QtWidgets.QLabel(self)
+        # self.pixmap = QPixmap('afbeelding.jpg')
+        # self.label.setPixmap(self.pixmap)
+        # self.show()
 
-
+        image_label = self.afbeeldinglabel('afbeelding.jpg')  # Pass the image path
+        layout.addWidget(image_label)
+        
         textedit = QtWidgets.QTextEdit("text")
         textedit.append("kies wat je bij je meting wil")
-
-
-        
-        group_box = QtWidgets.QGroupBox("Group Box")
-        group_layout = QtWidgets.QVBoxLayout(group_box)
-
-        option_1 = QtWidgets.QCheckBox("wel onzekerheid")
-        option_2 = QtWidgets.QCheckBox("iets anders")
-        option_1.setChecked(True)
-
-        
-        group_layout.addWidget(option_1)
-        group_layout.addWidget(option_2)
-
-
-        layout.addWidget(group_box)
         layout.addWidget(textedit)
-        group_box.setLayout(group_layout)
+
+
+    def afbeeldinglabel(self, path):
+        image_label = QtWidgets.QLabel()
+        pixmap = QPixmap(path)
+        image_label.setPixmap(pixmap)
+        image_label.setScaledContents(True)
+        image_label.setFixedSize(pixmap.width(), pixmap.height())  # Set to the image's size
+
+        return image_label
+
 
     def plot(self):
         """plots the sine function
@@ -153,8 +172,23 @@ class TabWidgetApp(QtWidgets.QMainWindow):
     def verandering(self):
         if self.wel_plot.isChecked():
             self.plot()
+        else:
+            self.plot_widget.clear()
         if self.geen_plot.isChecked():
             self.plot_widget.clear()
+
+    def afbeelding(self):
+        hbox = QtWidgets.QHBoxLayout(self)
+        pixmap = QPixmap('afbeelding.jpg')
+
+        lbl = QtWidgets.QLabel(self)
+        lbl.setPixmap(pixmap)
+
+        hbox.addWidget(lbl)
+        self.setLayout(hbox)
+
+        self.move(100, 100)
+        self.show()
 
     @Slot()
     def save_data(self):
@@ -165,6 +199,7 @@ class TabWidgetApp(QtWidgets.QMainWindow):
             writer.writerow(['Hz', 'Hz_std', 'fWHM', 'amp'])
             for a, b, c, d, in zip(self.frequentie, self.std, self.FWHM, self.ampl):
                 writer.writerow([a, b, c, d])
+
 def main():
     app = QtWidgets.QApplication(sys.argv)
     ui = TabWidgetApp()
