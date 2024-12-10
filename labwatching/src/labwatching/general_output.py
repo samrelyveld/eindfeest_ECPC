@@ -6,15 +6,14 @@ from scipy.optimize import curve_fit
 from scipy.fft import fft, fftfreq
 from lmfit import models
 
-data = []
 fit_list = []
 
 datasets = {
-    "Prom 1.5% PEO": fit_list,
+    "Prom 1.5% PEO": fit_list
 }
 
 colors = {
-    "Prom 1.5% PEO": "black",
+    "Prom 1.5% PEO": "black"
 }
 
 
@@ -44,12 +43,13 @@ def fit_sec(data_input):
     # Visualiseer de frequentiespectrum
 
     # Snelheid berekening
-    wavelength = 632.8e-9  # Voorbeeld golflengte in meters (532 nm voor groen licht)
-    theta = np.radians(4.5)  # Voorbeeld hoek tussen de bundels in graden
+    wavelength = 632.8e-9 
+    theta = np.radians(4.5) 
     velocity = (wavelength / 2) * dominant_frequency / np.sin(theta)
 
     print(f"Dominante frequentie: {dominant_frequency:.2f} Hz")
     print(f"Geschatte snelheid: {velocity:.2f} m/s")
+    return int(dominant_frequency)
 
 
 def process_and_fit_shifted(dataset, label, color):
@@ -94,7 +94,9 @@ def measure():
                 read = len(data)
                 total_read += read
                 print(f"Acquired data: {read} samples. Total {total_read}.", end="\r")
+                print("fit sec =",(fit_sec(data)))
                 fit_list.append(fit_sec(data))
+                print(fit_list)
         except KeyboardInterrupt:
             pass
         finally:
