@@ -4,8 +4,8 @@ import pyqtgraph as pg
 import numpy as np
 from PySide6 import QtWidgets
 from PySide6.QtCore import Slot
-from PySide6.QtGui import QKeySequence, QShortcut, QFont, QPixmap
-from labwatching.outputclasschat import FrequencyMeasurement
+from PySide6.QtGui import QKeySequence, QShortcut, QFont
+from outputclasschat import FrequencyMeasurement
 
 pg.setConfigOption("background", "w")
 pg.setConfigOption("foreground", "k")
@@ -137,24 +137,30 @@ class TabWidgetApp(QtWidgets.QMainWindow):
         """plots the sine function
         """
         self.plot_widget.clear()
-        frequentie, fft = self.fftmeasure.fit_sec()
-        self.plot_widget.plot(frequentie, fft, symbol=None, pen={"color": "m", "width": 5})
-        self.plot_widget.setLabel("left", "y-axis [units]")
-        self.plot_widget.setLabel("bottom", "x-axis [units]")
+        self.datafile = self.fftmeasure.measure()
+        self.frequentie, self.fft = self.fftmeasure.fit_sec(self.datafile)
+        self.plot_widget.plot(self.frequentie, self.fft, symbol=None, pen={"color": "m", "width": 5})
+        self.plot_widget.setLabel("left", "y-axis [amplitude]")
+        self.plot_widget.setLabel("bottom", "x-axis [frequentie in hz]")
 
-    def plthist(self):
-        """plots the sine function
-        """
-        self.plot_widget.clear()
+    # def plot(self):
+    #     self.plot_widget.clear()
+    #     x = np.linspace(-np.pi, np.pi, 100)
+    #     self.plot_widget.plot(x, np.sin(x), symbol=None, pen={"color": "m", "width": 5})
+    #     self.plot_widget.setLabel("left", "y-axis [units]")
+    #     self.plot_widget.setLabel("bottom", "x-axis [units]")
+
+    # def plthist(self):
+    #     """plots the sine function
+    #     """
+    #     self.plot_widget.clear()
  
-        fit_antwoord = self.fftexp.measure()
+    #     self.plot_widget.plot(fit_antwoord, bins=20, color='blue', edgecolor='black', alpha=0.7)
+    #     self.plot_widget.setLabel('Dominant Frequency (Hz)')
+    #     self.plot_widget.setLabel('Count')
+    #     self.plot_widget.setTitle('Histogram of Dominant Frequencies')
 
-        self.plot_widget.plot(fit_antwoord, bins=20, color='blue', edgecolor='black', alpha=0.7)
-        self.plot_widget.setLabel('Dominant Frequency (Hz)')
-        self.plot_widget.setLabel('Count')
-        self.plot_widget.setTitle('Histogram of Dominant Frequencies')
-
-        self.plot()
+    #     self.plot()
 
     def key_binding(self):
         for i in range(self.tab_widget.count()):
@@ -193,9 +199,9 @@ class TabWidgetApp(QtWidgets.QMainWindow):
 
         with open(filename, 'w', newline='') as csvfile:
             writer = csv.writer(csvfile)    
-            writer.writerow(['Hz', 'Hz_std', 'fWHM', 'amp'])
-            for a, b, c, d, in zip(self.frequentie, self.std, self.FWHM, self.ampl):
-                writer.writerow([a, b, c, d])
+            writer.writerow(['Hz', 'FFT fit'])
+            for a, b, in zip(self.frequentie, self.fft):
+                writer.writerow([a, b,])
 
 def main():
     app = QtWidgets.QApplication(sys.argv)

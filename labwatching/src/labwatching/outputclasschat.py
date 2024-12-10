@@ -81,7 +81,7 @@ class FrequencyMeasurement:
 
                 # Plot the histogram of dominant frequencies
                 self.plot_histogram()
-        return self.fit_list
+        return self.fit_list, data
     
     def plot_histogram(self):
         """
