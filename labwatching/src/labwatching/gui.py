@@ -5,7 +5,7 @@ import numpy as np
 from PySide6 import QtWidgets
 from PySide6.QtCore import Slot
 from PySide6.QtGui import QKeySequence, QShortcut, QFont, QPixmap
-#from labwatching.model_test import data_analysis
+from labwatching.outputclasschat import FrequencyMeasurement
 
 pg.setConfigOption("background", "w")
 pg.setConfigOption("foreground", "k")
@@ -14,6 +14,7 @@ pg.setConfigOption("foreground", "k")
 class TabWidgetApp(QtWidgets.QMainWindow):
     def __init__(self):
         super().__init__()
+        self.fftmeasure = FrequencyMeasurement()
         self.setWindowTitle('Tab Widget Demo')
         self.setGeometry(100, 100, 400, 300)
 
@@ -34,7 +35,7 @@ class TabWidgetApp(QtWidgets.QMainWindow):
         self.tab4 = QtWidgets.QWidget()
 
         self.tab_widget.addTab(self.tab4, "overzicht, menu")
-        self.tab_widget.addTab(self.tab1, "grafiek")
+        self.tab_widget.addTab(self.tab1, "FFT LDA")
         self.tab_widget.addTab(self.tab2, "Tab opslaan")
         self.tab_widget.addTab(self.tab3, "wie zijn wij")
 
@@ -136,10 +137,24 @@ class TabWidgetApp(QtWidgets.QMainWindow):
         """plots the sine function
         """
         self.plot_widget.clear()
-        x = np.linspace(-np.pi, np.pi, 100)
-        self.plot_widget.plot(x, np.sin(x), symbol=None, pen={"color": "m", "width": 5})
+        frequentie, fft = self.fftmeasure.fit_sec()
+        self.plot_widget.plot(frequentie, fft, symbol=None, pen={"color": "m", "width": 5})
         self.plot_widget.setLabel("left", "y-axis [units]")
         self.plot_widget.setLabel("bottom", "x-axis [units]")
+
+    def plthist(self):
+        """plots the sine function
+        """
+        self.plot_widget.clear()
+ 
+        fit_antwoord = self.fftexp.measure()
+
+        self.plot_widget.plot(fit_antwoord, bins=20, color='blue', edgecolor='black', alpha=0.7)
+        self.plot_widget.setLabel('Dominant Frequency (Hz)')
+        self.plot_widget.setLabel('Count')
+        self.plot_widget.setTitle('Histogram of Dominant Frequencies')
+
+        self.plot()
 
     def key_binding(self):
         for i in range(self.tab_widget.count()):

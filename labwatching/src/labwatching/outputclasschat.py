@@ -45,7 +45,7 @@ class FrequencyMeasurement:
 
         print(f"Dominant Frequency: {dominant_frequency:.2f} Hz")
         print(f"Estimated Velocity: {velocity:.2f} m/s")
-        return int(dominant_frequency)
+        return int(dominant_frequency), positive_frequencies, positive_fft
 
     def measure(self):
         """
@@ -68,7 +68,7 @@ class FrequencyMeasurement:
                     total_read += read
 
                     print(f"Acquired data: {read} samples. Total {total_read}.", end="\r")
-                    dominant_frequency = self.fit_sec(data)
+                    dominant_frequency = self.fit_sec(data)[0]
                     self.fit_list.append(dominant_frequency)
                     print(f"Current Dominant Frequency: {dominant_frequency} Hz")
                     print(f"Fit List: {self.fit_list}")
@@ -81,7 +81,8 @@ class FrequencyMeasurement:
 
                 # Plot the histogram of dominant frequencies
                 self.plot_histogram()
-
+        return self.fit_list
+    
     def plot_histogram(self):
         """
         Plot a histogram of the dominant frequencies recorded during the measurement.
