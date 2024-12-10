@@ -102,8 +102,8 @@ class datafiles:
         self.frequencies = fftfreq(self.n, d=1/self.sampling_rate)  # Frequenties bij FFT
 
         # Behoud alleen de positieve frequenties
-        self.positive_frequencies = self.frequencies[:n // 2]
-        self.positive_fft = np.abs(self.fft_result[:n // 2])
+        self.positive_frequencies = self.frequencies[:self.n // 2]
+        self.positive_fft = np.abs(self.fft_result[:self.n // 2])
 
         # Vind de dominante frequentie
         self.dominant_frequency_index = np.argmax(self.positive_fft)

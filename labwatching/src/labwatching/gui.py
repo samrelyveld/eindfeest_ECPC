@@ -17,7 +17,7 @@ class TabWidgetApp(QtWidgets.QMainWindow):
         self.setWindowTitle('Tab Widget Demo')
         self.setGeometry(100, 100, 400, 300)
 
-        #self.setStyleSheet("background-color: yellow;")
+        self.setStyleSheet("background-color: yellow;")
 
         self.central_widget = QtWidgets.QWidget()
         self.setCentralWidget(self.central_widget)
@@ -54,6 +54,7 @@ class TabWidgetApp(QtWidgets.QMainWindow):
         
 
     def initTab4(self):
+        self.setStyleSheet("background-color: yellow;")
         layout = QtWidgets.QVBoxLayout(self.tab4)
         self.textedit = QtWidgets.QTextEdit() 
         self.label_1 = QtWidgets.QLabel("Welkom bij labwatching", self) 
@@ -100,6 +101,7 @@ class TabWidgetApp(QtWidgets.QMainWindow):
         layout.addWidget(group_box)
 
     def initTab2(self):
+        self.setStyleSheet("background-color: yellow;")
         layout = QtWidgets.QVBoxLayout(self.tab2)
         label = QtWidgets.QLabel("Content of Tab 2")
         save_button = QtWidgets.QPushButton("save")
@@ -110,33 +112,24 @@ class TabWidgetApp(QtWidgets.QMainWindow):
 
     def initTab3(self):
         self.acceptDrops()
-        layout = QtWidgets.QHBoxLayout(self.tab3)
+        layout = QtWidgets.QVBoxLayout(self.tab3)
         
         label = QtWidgets.QLabel("About us")
         layout.addWidget(label)
-        
-        
-        # self.label = QtWidgets.QLabel(self)
-        # self.pixmap = QPixmap('afbeelding.jpg')
-        # self.label.setPixmap(self.pixmap)
-        # self.show()
-
-        image_label = self.afbeeldinglabel('afbeelding.jpg')  # Pass the image path
-        layout.addWidget(image_label)
-        
+    
         textedit = QtWidgets.QTextEdit("text")
-        textedit.append("kies wat je bij je meting wil")
+        textedit.append("Wij gebruikten het programma lab view en dachten dat kan beter")
+        textedit.append("daarom hebben wij (Daan en Sam) dit ontwikkeld")
+
         layout.addWidget(textedit)
 
+        layout.addStretch()
 
-    def afbeeldinglabel(self, path):
-        image_label = QtWidgets.QLabel()
-        pixmap = QPixmap(path)
-        image_label.setPixmap(pixmap)
-        image_label.setScaledContents(True)
-        image_label.setFixedSize(pixmap.width(), pixmap.height())  # Set to the image's size
+        bottom_label = QtWidgets.QLabel("We are always (lab) watching")
+        bottom_label.setStyleSheet("background-color: lightgray; padding: 5px;")
+        layout.addWidget(bottom_label)
+        
 
-        return image_label
 
 
     def plot(self):
@@ -177,18 +170,7 @@ class TabWidgetApp(QtWidgets.QMainWindow):
         if self.geen_plot.isChecked():
             self.plot_widget.clear()
 
-    def afbeelding(self):
-        hbox = QtWidgets.QHBoxLayout(self)
-        pixmap = QPixmap('afbeelding.jpg')
 
-        lbl = QtWidgets.QLabel(self)
-        lbl.setPixmap(pixmap)
-
-        hbox.addWidget(lbl)
-        self.setLayout(hbox)
-
-        self.move(100, 100)
-        self.show()
 
     @Slot()
     def save_data(self):
